@@ -2,11 +2,11 @@ from googleapiclient.discovery import build
 from pytube import YouTube as yt
 import json
 
-SEARCH_INPUT = "--"
+SEARCH_INPUT = "swan goose raflum"
 
 SERVICE_NAME = "youtube"
 SERVICE_VERSION = "v3"
-DEV_KEY = "--"
+DEV_KEY = "AIzaSyD1HExOrJEk_lPwmOpH9k8fAKrXusQ6KDQ"
 
 youtube = build(serviceName=SERVICE_NAME,version=SERVICE_VERSION,developerKey=DEV_KEY)
 
