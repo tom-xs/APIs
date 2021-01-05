@@ -11,33 +11,25 @@ youtube = build(serviceName=SERVICE_NAME,version=SERVICE_VERSION,developerKey=DE
 
 musicbrainzngs.set_useragent("Learning programming with youtube api", "0.0", "txs@ecomp.poli.br")
 
-def searchAlbum(ALBUM_SEARCH_INPUT):
-     return musicbrainzngs.search_release_groups(query=ALBUM_SEARCH_INPUT)
+def searchRecording(ALBUM_SEARCH_INPUT):
+     return musicbrainzngs.search_recordings(query=ALBUM_SEARCH_INPUT)
+
+def getRecordingList(dic):
+     recordingList = []
+     count = 0
+
+     for item in dic["recording-list"]:
+          string = str(count) + " - "
+          count+=1
+          string = string + item['title']
+          string = string+ " - " +item['release-list'][0]['title']
+          recordingList.append(string)
+
+     return recordingList
 
 def getJsonForInput(USER_INPUT):
      responseDict = youtube.search().list(part="id, snippet",q=USER_INPUT).execute()
      return json.dumps((responseDict["items"]),indent = 4)
-
-def getIdandNameLists(result):
-    albumNameList = []
-    idList = []
-
-    for item in result["release-group-list"]:
-        idList.append(item["id"])
-        albumNameList.append(item["title"])
-
-    return albumNameList , idList
-
-def getUrllist(albumNameList,idList):
-    newlistUrl = []
-    newAlbumName = []
-
-    for item in range(0,len(albumNameList)):
-        try:
-            newlistUrl.append(musicbrainzngs.get_release_group_image_list(idList[item])['images'][0]['image'])
-            newAlbumName.append(albumNameList[item])
-        except musicbrainzngs.musicbrainz.ResponseError:
-    return newAlbumName , newlistUrl
 
 def getListsVideosIds(json):
      listJson = json.split("\n")
@@ -67,15 +59,16 @@ def main():
      SONG_INPUT = input("escreva o nome da música que você quer baixar: ")
      YTlistNames, YTlistURLs = getListsVideosIds(getJsonForInput(SONG_INPUT))
      printElements(YTlistNames , YTlistURLs)
-     YTN_INPUT = int(input("escolha o numero do elementos que você quer baixar: "))
+     YTN_INPUT = int(input("digite o nº da música que você quer baixar: "))
      print(str(YTN_INPUT) + " - "+ YTlistNames[YTN_INPUT] + " : " + YTlistURLs[YTN_INPUT])
 
+     ALBUM_SEARCH_INPUT = input("escreva o nome da música para cover art e metadados: ")
+     result = searchRecording(ALBUM_SEARCH_INPUT)
 
-     ALBUM_SEARCH_INPUT = input("escreva o nome do album/artista para cover art: ")
-     result = searchAlbum(ALBUM_SEARCH_INPUT)
+     MBRecordingList = getRecordingList(result)
+     MBN_INPUT = input("digite o nº da música com os metadados desejados: ")
 
-     MBalbumNameList , MBidList = getIdandNameLists(result)
-     MBalbumNameList , MBlistUrl = getUrllist(MBalbumNameList , MBidList)
+
 
      print("dale")
 
