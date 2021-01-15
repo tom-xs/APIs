@@ -5,7 +5,7 @@ import json
 
 SERVICE_NAME = "youtube"
 SERVICE_VERSION = "v3"
-DEV_KEY = "AIzaSyD1HExOrJEk_lPwmOpH9k8fAKrXusQ6KDQ"
+DEV_KEY = ""
 
 youtube = build(serviceName=SERVICE_NAME,version=SERVICE_VERSION,developerKey=DEV_KEY)
 
